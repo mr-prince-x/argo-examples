@@ -1,6 +1,16 @@
-
-replicas: 5
-
-configmap:
-  data:
-    CUSTOM_HEADER: 'This is on the DEV environment!'
+    spec:
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+      project: "argo-rollouts"
+      source:
+        repoURL: https://git.info/scm/devops/argo-projects.git
+        targetRevision: HEAD
+        path: 'argocd-repos/argo-rollouts/development'
+        plugin:
+          name: argocd-vault-plugin
+          env:
+            - name: helm_args
+              value: -f values.yaml -n saas-argo-rollouts
+        helm:
+          valueFiles: []
